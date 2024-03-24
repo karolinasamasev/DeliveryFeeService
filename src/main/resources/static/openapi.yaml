@@ -1,0 +1,73 @@
+openapi: "3.0.3"
+info:
+  title: "DeliveryFeeService API"
+  description: "DeliveryFeeService API"
+  version: "1.0.0"
+servers:
+  - url: "http://localhost:8080"
+paths:
+  /api/v1/fees/calculate:
+    get:
+      summary: "Application calculates total delivery fee"
+      description: "Delivery fee calculations are based on parameters vehicle and city. Additional fees are calculated based on most recent weather data for the given city"
+      operationId: ""
+      parameters:
+        - name: "city"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            enum:
+              - "TALLINN"
+              - "TARTU"
+              - "PÄRNU"
+        - name: "vehicleType"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            enum:
+              - "CAR"
+              - "SCOOTER"
+              - "BIKE"
+      responses:
+        "200":
+          description: "Returns the total delivery fee"
+          content:
+            'application/json':
+              schema:
+                type: number
+                format: double
+                example:
+                  3.50
+        "409":
+          description: "Conflict with the current state of a resource"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ResponseErrorDto"
+              example:
+                statusCode: 409
+                message: "Usage of selected vehicle type is forbidden"
+        "404":
+          description: "Server cannot find the requested resource"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ResponseErrorDto"
+              example:
+                statusCode: 404
+                message: "Observation data not found"
+components:
+  schemas:
+    ResponseErrorDto:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        message:
+          type: string
+        description:
+          type: string
+  

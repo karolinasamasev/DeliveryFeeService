@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: "delivery-fee-service"
+  datasource:
+    url: jdbc:h2:file:./data/weather-data
+    username: sa
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+springdoc:
+  swagger-ui:
+    url: /openapi.yaml
+
+cronjob:
+  frequency: "0 15 * * * *"
